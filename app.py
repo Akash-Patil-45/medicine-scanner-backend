@@ -58,9 +58,9 @@ def process_image():
 
     If any information is not clearly visible or not present, state "Not found".
 
-    Return the result strictly in JSON format with keys "medicine_name" and "expiry_date".
-    
-    Example: {"medicine_name": "Paracetamol 500mg Tablets", "expiry_date": "10/2026"}
+    Return the result strictly in JSON format with keys "brand_name" and "expiry_date".
+
+    Example: {"brand_name": "Paracetamol 500mg Tablets", "expiry_date": "10/2026"}
     """
 
     try:

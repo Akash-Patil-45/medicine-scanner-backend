@@ -52,7 +52,7 @@ def process_image():
     # The prompt for the Gemini model
     prompt = """
     Analyze the provided image of a medicine strip.
-    Identify the brand name and the expiration date (EXP).
+    Identify the brand/medicine name and the expiration date (EXP).
     If any information is not clearly visible, state "Not found".
     Return the result strictly in JSON format with keys "brand_name" and "expiry_date".
     Example: {"brand_name": "Calpol", "expiry_date": "10/2026"}

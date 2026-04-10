@@ -51,16 +51,27 @@ def process_image():
 
     # The prompt for the Gemini model
     prompt = """
-    Analyze the provided image of a medicine strip.
-    Identify the following information:
-    1. The **full medicine name** as printed on the strip (include brand name, generic name, and dosage if visible as part of the main name).
-    2. The **expiration date** (EXP).
+    Analyze the provided image.
 
-    If any information is not clearly visible or not present, state "Not found".
+Step 1: Determine whether the image contains a medicine strip (blister pack).
+- If it is NOT a medicine strip, return:
+  {"brand_name": "Not a medicine strip", "expiry_date": "Not found"}
 
-    Return the result strictly in JSON format with keys "brand_name" and "expiry_date".
+Step 2: If it IS a medicine strip:
+- Extract the full medicine name exactly as printed on the strip (include brand name and generic name if part of the main label).
+- Look for the expiration date (EXP).
 
-    Example: {"brand_name": "Paracetamol 500mg Tablets", "expiry_date": "10/2026"}
+Rules:
+- If the expiration date is clearly visible, return both fields.
+- If the expiration date is NOT visible or unclear, return:
+  {"brand_name": "<extracted medicine name>", "expiry_date": "Not found"}
+- If the medicine name is not clearly visible, set it as "Not found".
+
+Return the result strictly in JSON format with keys:
+"brand_name" and "expiry_date"
+
+Example:
+{"brand_name": "Paracetamol 500mg Tablets", "expiry_date": "10/2026"}
     """
 
     try:

@@ -7,6 +7,7 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -75,8 +76,23 @@ def process_image():
         return jsonify(result)
 
     except Exception as e:
-        print(f"An error occurred during Gemini API call: {e}")
-        return jsonify({'error': 'Failed to process image with Gemini'}), 500
+        if "429" in str(e):
+        #print("Rate limit hit. Retrying after delay...")
+            time.sleep(60)  # wait 60 sec
+            try:
+                response = model.generate_content([prompt, img])
+                json_str = response.text.strip().replace('```json', '').replace('```', '')
+                result = json.loads(json_str)
+                return jsonify(result)
+            except Exception as retry_error:
+                return jsonify({'error': 'Retry failed'}), 429
+
+        return jsonify({'error': 'Failed to process image'}), 500
+           # print(f"An error occurred during Gemini API call: {e}")
+           # return jsonify({'error': 'Failed to process image with Gemini'}), 500
+            
+           # response = model.generate_content([prompt, img])
+        
 
 # --- Run the Flask App ---
 if __name__ == '__main__':
